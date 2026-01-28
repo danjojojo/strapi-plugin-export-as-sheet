@@ -1,4 +1,4 @@
-import { format, parseISO } from 'date-fns';
+import { format, parseISO, isValid } from 'date-fns';
 import { PLUGIN_CONTENT_TYPE } from '../constants';
 
 const homepageController = {
@@ -63,7 +63,9 @@ const homepageController = {
             filteredEntry[attr.field] = value?.url ?? 'None';
             break;
           case 'datetime':
-            filteredEntry[attr.field] = format(parseISO(value), 'MMMM dd, yyyy, hh:mm a');
+            filteredEntry[attr.field] = isValid(parseISO(value))
+              ? format(parseISO(value), 'MMMM dd, yyyy, hh:mm a')
+              : 'N/A';
             break;
           default:
             filteredEntry[attr.field] = value ?? 'None';
