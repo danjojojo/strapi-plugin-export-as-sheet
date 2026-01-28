@@ -1,0 +1,1 @@
+export const PLUGIN_CONTENT_TYPE = 'plugin::export-as-sheet.exportable-collection';

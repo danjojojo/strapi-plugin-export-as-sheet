@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "exportable_collection",
+  "info": {
+    "singularName": "exportable-collection",
+    "pluralName": "exportable-collections",
+    "displayName": "Exportable Collection"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {
+    "content-manager": {
+      "visible": false
+    },
+    "content-type-builder": {
+      "visible": false
+    }
+  },
+  "attributes": {
+    "uid": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    }
+  }
+}

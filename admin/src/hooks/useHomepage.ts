@@ -1,0 +1,82 @@
+import { homepageAPI } from '../api/homepage';
+import { useStateContext } from '../components/provider/StateProvider';
+import { useEffect } from 'react';
+import type { getCollectionEntries } from '../schema/homepageSchema';
+
+export function useHomepage() {
+  const homepageApi = homepageAPI();
+  const { fetchParams, fetchParamsUpdate, homepage, homepageUpdate } = useStateContext();
+
+  const fetchExportableCollections = async () => {
+    const data = await homepageApi.getExportableCollections();
+    homepageUpdate({ type: 'SET_COLLECTIONS', payload: data || [] });
+    return data;
+  };
+
+  const selectCollection = (value: string) => {
+    homepageUpdate({ type: 'SET_SELECTED_COLLECTION', payload: value });
+  };
+
+  const fetchCollectionEntries = async () => {
+    if (!homepage.selectedCollection) return;
+
+    const params: getCollectionEntries = {
+      uid: homepage.selectedCollection,
+      startDate: fetchParams.startDate?.toISOString() || new Date().toISOString(),
+      endDate: fetchParams.endDate?.toISOString() || null,
+    };
+
+    const data = await homepageApi.getCollectionEntries(params);
+    homepageUpdate({ type: 'SET_ENTRIES', payload: data?.entries || [] });
+    homepageUpdate({ type: 'SET_ATTRIBUTES', payload: data?.attributes || [] });
+    fetchParamsUpdate({ type: 'SET_DISABLE_FETCH', payload: true });
+  };
+
+  const updateDate = {
+    start: (date: Date | null) => {
+      fetchParamsUpdate({ type: 'SET_START_DATE', payload: date });
+    },
+    end: (date: Date | null) => {
+      fetchParamsUpdate({ type: 'SET_END_DATE', payload: date });
+    },
+    maxEnd: (date: Date | null) => {
+      fetchParamsUpdate({ type: 'SET_MAX_END_DATE', payload: date });
+    },
+  };
+
+  const exportAsSheet = async () => {
+    const payload = {
+      attributes: homepage.attributes,
+      entries: homepage.entries,
+    };
+    await homepageApi.exportEntries(payload);
+  }
+
+  useEffect(() => {
+    if (homepage.selectedCollection && (fetchParams.startDate || fetchParams.endDate)) {
+      fetchParamsUpdate({ type: 'SET_DISABLE_FETCH', payload: false });
+    }
+  }, [homepage.selectedCollection, fetchParams.startDate, fetchParams.endDate]);
+
+  useEffect(() => {
+    if (fetchParams.startDate) {
+      let endMaxDate = fetchParams.startDate;
+      if (endMaxDate <= new Date()) {
+        endMaxDate = new Date();
+      } else {
+        endMaxDate.setDate(endMaxDate.getDate() + 30);
+      }
+      endMaxDate.setHours(23, 59, 59, 999);
+      updateDate.maxEnd(endMaxDate);
+      updateDate.end(endMaxDate);
+    }
+  }, [fetchParams.startDate]);
+
+  return {
+    fetchExportableCollections,
+    selectCollection,
+    fetchCollectionEntries,
+    updateDate,
+    exportAsSheet,
+  };
+}
