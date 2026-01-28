@@ -1,7 +1,7 @@
 {
   "name": "strapi-plugin-export-as-sheet",
   "description": "Export Strapi collection as Excel Spreadsheet",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "author": "Daniel Molina <danieljmolina03@gmail.com>",
   "keywords": [],
@@ -66,5 +66,9 @@
     "name": "export-as-sheet",
     "displayName": "Export as Sheet",
     "description": "Export collection as Excel Spreadsheet"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:danjojojo/strapi-plugin-export-as-sheet.git"
   }
 }

@@ -10,7 +10,7 @@ export function SelectCollection() {
   const { fetchCollectionEntries, updateDate, selectCollection } = useHomepage();
 
   return (
-    <Flex direction="row" alignItems="start" gap="16px">
+    <Flex direction="row" alignItems="center" gap="16px">
       <Flex direction="column" alignItems="start" gap="4px">
         <Typography textColor="#A5A5BA" fontSize="10px">
           COLLECTION
