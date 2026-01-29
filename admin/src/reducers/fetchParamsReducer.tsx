@@ -1,17 +1,17 @@
 type FetchParams = {
   disableFetch: boolean;
   disableExport: boolean;
-  startDate: Date | null;
-  endDate: Date | null;
-  maxEndDate: Date | null;
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+  maxEndDate: Date | undefined;
 };
 
 type FetchParamsAction =
   | { type: 'SET_DISABLE_FETCH'; payload: boolean }
   | { type: 'SET_DISABLE_EXPORT'; payload: boolean }
-  | { type: 'SET_START_DATE'; payload: Date | null }
-  | { type: 'SET_END_DATE'; payload: Date | null }
-  | { type: 'SET_MAX_END_DATE'; payload: Date | null };
+  | { type: 'SET_START_DATE'; payload: Date | undefined }
+  | { type: 'SET_END_DATE'; payload: Date | undefined }
+  | { type: 'SET_MAX_END_DATE'; payload: Date | undefined };
 
 export function fetchParamsReducer(state: FetchParams, action: FetchParamsAction) {
   switch (action.type) {

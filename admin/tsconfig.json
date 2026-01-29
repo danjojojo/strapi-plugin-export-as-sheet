@@ -3,6 +3,9 @@
   "include": ["./src", "./custom.d.ts"],
   "compilerOptions": {
     "rootDir": "../",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "declaration": true,
+    "outDir": "./dist/src/admin",
+    "strict": true
   }
 }

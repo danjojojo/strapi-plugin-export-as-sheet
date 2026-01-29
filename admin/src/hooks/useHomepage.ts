@@ -12,8 +12,8 @@ export function useHomepage() {
     return data;
   };
 
-  const selectCollection = (value: string) => {
-    homepageUpdate({ type: 'SET_SELECTED_COLLECTION', payload: value });
+  const selectCollection = (value: string | number) => {
+    homepageUpdate({ type: 'SET_SELECTED_COLLECTION', payload: value.toString() });
   };
 
   const fetchCollectionEntries = async () => {
@@ -32,13 +32,13 @@ export function useHomepage() {
   };
 
   const updateDate = {
-    start: (date: Date | null) => {
+    start: (date: Date | undefined) => {
       fetchParamsUpdate({ type: 'SET_START_DATE', payload: date });
     },
-    end: (date: Date | null) => {
+    end: (date: Date | undefined) => {
       fetchParamsUpdate({ type: 'SET_END_DATE', payload: date });
     },
-    maxEnd: (date: Date | null) => {
+    maxEnd: (date: Date | undefined) => {
       fetchParamsUpdate({ type: 'SET_MAX_END_DATE', payload: date });
     },
   };

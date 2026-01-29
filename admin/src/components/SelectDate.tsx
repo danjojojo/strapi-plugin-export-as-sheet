@@ -3,11 +3,11 @@ import { convertDateToLocal } from '../utils/utils';
 
 interface SelectDateProps {
   label: string;
-  date: Date | null;
-  setDate: (date: Date | null) => void;
+  date: Date | undefined;
+  setDate: (date: Date | undefined) => void;
   minDate?: Date | undefined;
-  maxDate?: Date | null;
-  value?: Date | null;
+  maxDate?: Date | undefined;
+  value?: Date | undefined;
   disabled?: boolean;
   type: 'start' | 'end';
 }
@@ -17,7 +17,7 @@ export function SelectDate({
   setDate = () => {},
   minDate = undefined,
   maxDate = new Date(),
-  value = null,
+  value = undefined,
   disabled = false,
   type,
 }: SelectDateProps) {
@@ -27,8 +27,9 @@ export function SelectDate({
         {label.toUpperCase()}
       </Typography>
       <DatePicker
-        size="L"
-        onChange={(date: Date | null) => {
+        size="M"
+        onChange={(date: Date | undefined) => {
+          if (!date) return;
           switch (type) {
             case 'start':
               date?.setHours(0, 0, 0, 0);

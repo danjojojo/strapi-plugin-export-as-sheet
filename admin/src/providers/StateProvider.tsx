@@ -26,7 +26,7 @@ const useStates = () => {
     disableExport: false,
     startDate: convertDateToLocal(new Date(today)),
     endDate: convertDateToLocal(new Date(endToday)),
-    maxEndDate: null,
+    maxEndDate: undefined,
   });
   const [settings, settingsUpdate] = useReducer(settingsReducer, {
     strapiCollections: [],
