@@ -16,7 +16,7 @@ export function Header() {
           {homepage.entries.length} {homepage.entries.length === 1 ? 'entry' : 'entries'} found
         </Typography>
         <Button
-          variant="primary"
+          variant="default"
           disabled={homepage.entries.length === 0 || fetchParams.disableExport}
           size="L"
           onClick={exportAsSheet}

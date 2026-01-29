@@ -6,7 +6,7 @@ export function RenderTable() {
   const { homepage } = useStateContext();
   const { entries, attributes } = homepage;
   return (
-    <Table>
+    <Table colCount={attributes.length} rowCount={entries.length}>
       <Thead>
         <Tr>
           {attributes.map((attribute, index) => (
