@@ -40,7 +40,7 @@ const SettingsPage = () => {
           {!isFetched ? <Loader small /> : <CheckboxList hook={hook} />}
         </Flex>
         <Button
-          size="L"
+          height="38px"
           marginTop="14px"
           onClick={hook.updateSettings}
           disabled={selectedExportableCollections.length === 0}

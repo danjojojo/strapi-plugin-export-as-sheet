@@ -67,10 +67,10 @@ export function SelectCollection() {
       />
       <Button
         variant="default"
-        size="L"
         disabled={disableFetch}
         onClick={fetchCollectionEntries}
         marginTop="18px"
+        height="38px"
       >
         Fetch Entries
       </Button>

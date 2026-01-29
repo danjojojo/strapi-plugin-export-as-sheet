@@ -1,8 +1,9 @@
 import { type ExportableCollection } from '../schema/SettingsSchema';
 import { PLUGIN_CONTENT_TYPE } from '../constants';
+import type { Context } from 'koa';
 
 const settingsController = {
-  async strapi(ctx) {
+  async strapi(ctx: Context) {
     const collections = Object.values(strapi.contentTypes)
       .filter((ct) => ct.kind === 'collectionType' && ct.uid.startsWith('api::'))
       .map((ct) => ({
@@ -12,12 +13,12 @@ const settingsController = {
     ctx.body = collections;
   },
 
-  async get(ctx) {
+  async get(ctx: Context) {
     const data = await strapi.entityService.findMany(PLUGIN_CONTENT_TYPE, {});
     ctx.body = data;
   },
 
-  async update(ctx) {
+  async update(ctx: Context) {
     const { payload }: ExportableCollection = ctx.request.body;
 
     try {

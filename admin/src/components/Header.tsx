@@ -18,7 +18,7 @@ export function Header() {
         <Button
           variant="default"
           disabled={homepage.entries.length === 0 || fetchParams.disableExport}
-          size="L"
+          height="38px"
           onClick={exportAsSheet}
         >
           Export as Sheet
