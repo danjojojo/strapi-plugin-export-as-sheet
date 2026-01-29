@@ -1,17 +1,18 @@
 import { format, parseISO, isValid } from 'date-fns';
 import { PLUGIN_CONTENT_TYPE } from '../constants';
+import type { Context } from 'koa';
 
 const homepageController = {
-  async getCollections(ctx) {
+  async getCollections(ctx: Context) {
     const exportableCollections = await strapi.entityService.findMany(PLUGIN_CONTENT_TYPE, {});
-    const collections = exportableCollections.map((col: any) => ({
+    const collections = exportableCollections?.map((col: any) => ({
       uid: col.uid,
       name: col.name,
     }));
     ctx.body = collections;
   },
 
-  async getEntries(ctx) {
+  async getEntries(ctx: Context) {
     const collectionUid = ctx.params.uid;
     const { start, end } = ctx.query;
     if (!collectionUid) {
@@ -26,7 +27,7 @@ const homepageController = {
     let entries: any[] = [];
 
     for (const [key, value] of Object.entries(contentTypes.attributes)) {
-      if (value.visible === false) continue; // for hidden attributes
+      if (value.visible === false || key === 'publishedAt') continue; // for hidden attributes
       const label = key
         .replace(/([a-z])([A-Z])/g, '$1 $2')
         .replace(/[_-]/g, ' ')
@@ -54,7 +55,7 @@ const homepageController = {
       },
     });
 
-    entries = rawEntries.map((entry: any) => {
+    entries = rawEntries?.map((entry: any) => {
       const filteredEntry: any = {};
       for (const attr of attributes) {
         const value = entry[attr.field];

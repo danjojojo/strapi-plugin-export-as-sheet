@@ -1,7 +1,8 @@
 import ExcelJS from 'exceljs';
+import type { Context } from 'koa';
 
 const exportController = {
-  async toSheet(ctx) {
+  async toSheet(ctx: Context) {
     const body = ctx.request.body;
     const attributes = body.attributes;
     const entries = body.entries;
@@ -9,7 +10,7 @@ const exportController = {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Exported Entries');
 
-    worksheet.columns = attributes.map((attr) => ({
+    worksheet.columns = attributes.map((attr: { label: string; field: string }) => ({
       header: attr.label,
       key: attr.field,
       width: 20,
