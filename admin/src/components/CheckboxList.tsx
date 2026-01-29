@@ -1,5 +1,5 @@
 import { Checkbox, Typography } from '@strapi/design-system';
-import { useStateContext } from './provider/StateProvider';
+import { useStateContext } from '../providers/StateProvider';
 import { UseSettingsReturnType } from '../hooks/useSettings';
 
 interface CheckboxList {

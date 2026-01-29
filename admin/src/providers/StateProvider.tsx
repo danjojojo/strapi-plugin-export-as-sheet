@@ -1,9 +1,12 @@
 import { useContext, createContext } from 'react';
 import { useReducer } from 'react';
-import { convertDateToLocal } from '../../utils/utils';
-import { settingsReducer } from '../../utils/settingsReducer';
-import { homepageReducer } from '../../utils/homepageReducer';
-import { fetchParamsReducer } from '../../utils/fetchParamsReducer';
+import { convertDateToLocal } from '../utils/utils';
+import {
+  settingsReducer,
+  homepageReducer,
+  fetchParamsReducer,
+  dialogBoxReducer,
+} from '../reducers';
 
 interface StateProviderProps {
   children: React.ReactNode;
@@ -20,6 +23,7 @@ const useStates = () => {
   });
   const [fetchParams, fetchParamsUpdate] = useReducer(fetchParamsReducer, {
     disableFetch: true,
+    disableExport: false,
     startDate: convertDateToLocal(new Date(today)),
     endDate: convertDateToLocal(new Date(endToday)),
     maxEndDate: null,
@@ -30,6 +34,10 @@ const useStates = () => {
     selectedExportableCollections: [],
     isFetched: false,
   });
+  const [dialog, dialogUpdate] = useReducer(dialogBoxReducer, {
+    isOpen: false,
+    message: 'An error occurred while executing the action. Please try refreshing the page.',
+  });
 
   return {
     homepage,
@@ -38,6 +46,8 @@ const useStates = () => {
     fetchParamsUpdate,
     settings,
     settingsUpdate,
+    dialog,
+    dialogUpdate,
   };
 };
 

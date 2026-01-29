@@ -1,6 +1,5 @@
 import { homepageAPI } from '../api/homepage';
-import { useStateContext } from '../components/provider/StateProvider';
-import { useEffect } from 'react';
+import { useStateContext } from '../providers/StateProvider';
 import type { getCollectionEntries } from '../schema/homepageSchema';
 
 export function useHomepage() {
@@ -50,27 +49,7 @@ export function useHomepage() {
       entries: homepage.entries,
     };
     await homepageApi.exportEntries(payload);
-  }
-
-  useEffect(() => {
-    if (homepage.selectedCollection && (fetchParams.startDate || fetchParams.endDate)) {
-      fetchParamsUpdate({ type: 'SET_DISABLE_FETCH', payload: false });
-    }
-  }, [homepage.selectedCollection, fetchParams.startDate, fetchParams.endDate]);
-
-  useEffect(() => {
-    if (fetchParams.startDate) {
-      let endMaxDate = fetchParams.startDate;
-      if (endMaxDate <= new Date()) {
-        endMaxDate = new Date();
-      } else {
-        endMaxDate.setDate(endMaxDate.getDate() + 30);
-      }
-      endMaxDate.setHours(23, 59, 59, 999);
-      updateDate.maxEnd(endMaxDate);
-      updateDate.end(endMaxDate);
-    }
-  }, [fetchParams.startDate]);
+  };
 
   return {
     fetchExportableCollections,

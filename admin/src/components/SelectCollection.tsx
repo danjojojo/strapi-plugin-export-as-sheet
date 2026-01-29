@@ -1,13 +1,33 @@
 import { SingleSelect, SingleSelectOption } from '@strapi/design-system';
 import { Flex, Button, Typography } from '@strapi/design-system';
-import { useStateContext } from './provider/StateProvider';
+import { useStateContext } from '../providers/StateProvider';
 import { SelectDate } from './SelectDate';
 import { useHomepage } from '../hooks/useHomepage';
+import { useEffect } from 'react';
 
 export function SelectCollection() {
-  const { homepage, fetchParams } = useStateContext();
+  const { homepage, fetchParams, fetchParamsUpdate } = useStateContext();
   const { endDate, startDate, maxEndDate, disableFetch } = fetchParams;
   const { fetchCollectionEntries, updateDate, selectCollection } = useHomepage();
+
+  useEffect(() => {
+    if (homepage.selectedCollection && (fetchParams.startDate || fetchParams.endDate)) {
+      fetchParamsUpdate({ type: 'SET_DISABLE_FETCH', payload: false });
+    }
+  }, [homepage.selectedCollection, fetchParams.startDate, fetchParams.endDate]);
+
+  useEffect(() => {
+    if (fetchParams.startDate) {
+      let endMaxDate = new Date(fetchParams.startDate);
+      endMaxDate.setDate(endMaxDate.getDate() + 30);
+      if (endMaxDate >= new Date()) {
+        endMaxDate = new Date();
+      }
+      endMaxDate.setHours(23, 59, 59, 999);
+      updateDate.maxEnd(endMaxDate);
+      updateDate.end(endMaxDate);
+    }
+  }, [fetchParams.startDate]);
 
   return (
     <Flex direction="row" alignItems="center" gap="16px">

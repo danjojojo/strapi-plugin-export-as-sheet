@@ -3,9 +3,8 @@ import ExcelJS from 'exceljs';
 const exportController = {
   async toSheet(ctx) {
     const body = ctx.request.body;
-
-    const attributes = body.body.attributes;
-    const entries = body.body.entries;
+    const attributes = body.attributes;
+    const entries = body.entries;
 
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Exported Entries');
