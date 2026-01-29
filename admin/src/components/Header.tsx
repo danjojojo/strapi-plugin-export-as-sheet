@@ -1,9 +1,9 @@
 import { Flex, Button, Typography } from '@strapi/design-system';
-import { useStateContext } from './provider/StateProvider';
+import { useStateContext } from '../providers/StateProvider';
 import { useHomepage } from '../hooks/useHomepage';
 
 export function Header() {
-  const { homepage } = useStateContext();
+  const { homepage, fetchParams } = useStateContext();
   const { exportAsSheet } = useHomepage();
 
   return (
@@ -17,7 +17,7 @@ export function Header() {
         </Typography>
         <Button
           variant="primary"
-          disabled={homepage.entries.length === 0}
+          disabled={homepage.entries.length === 0 || fetchParams.disableExport}
           size="L"
           onClick={exportAsSheet}
         >

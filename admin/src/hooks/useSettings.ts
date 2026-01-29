@@ -1,5 +1,5 @@
 import { settingsAPI } from '../api/settings';
-import { useStateContext } from '../components/provider/StateProvider';
+import { useStateContext } from '../providers/StateProvider';
 
 export function useSettings() {
   const settingsApi = settingsAPI();

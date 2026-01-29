@@ -1,6 +1,6 @@
 import { Table, Thead, Tbody, Tr, Td, Th } from '@strapi/design-system';
 import { Typography, Link } from '@strapi/design-system';
-import { useStateContext } from './provider/StateProvider';
+import { useStateContext } from '../providers/StateProvider';
 
 export function RenderTable() {
   const { homepage } = useStateContext();

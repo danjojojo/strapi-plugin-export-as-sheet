@@ -2,7 +2,7 @@ import { Page } from '@strapi/strapi/admin';
 import { Routes, Route } from 'react-router-dom';
 
 import { SettingsPage } from './SettingsPage';
-import { StateProvider } from '../components/provider/StateProvider';
+import { StateProvider } from '../providers/StateProvider';
 
 import { pluginPermissions } from '../permissions';
 

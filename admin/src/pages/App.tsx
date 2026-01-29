@@ -2,7 +2,7 @@ import { Page } from '@strapi/strapi/admin';
 import { Routes, Route } from 'react-router-dom';
 
 import { HomePage } from './HomePage';
-import { StateProvider } from "../components/provider/StateProvider"
+import { StateProvider } from "../providers/StateProvider"
 
 const App = () => {
   return (

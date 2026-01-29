@@ -1,6 +1,7 @@
 import { Main, Typography, Flex, Button, Loader } from '@strapi/design-system';
 import { useEffect } from 'react';
-import { useStateContext } from '../components/provider/StateProvider';
+import { DialogBox } from '../components/DialogBox';
+import { useStateContext } from '../providers/StateProvider';
 import { useSettings } from '../hooks/useSettings';
 import { CheckboxList } from '../components/CheckboxList';
 
@@ -16,6 +17,7 @@ const SettingsPage = () => {
 
   return (
     <Main>
+      <DialogBox />
       <Flex
         direction="column"
         width="100%"

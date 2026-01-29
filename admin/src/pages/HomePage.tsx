@@ -1,5 +1,6 @@
 import { Main, Box, Typography, Flex } from '@strapi/design-system';
 import { SelectCollection } from '../components/SelectCollection';
+import { DialogBox } from '../components/DialogBox';
 import { Header } from '../components/Header';
 import { RenderTable } from '../components/RenderTable';
 import { useHomepage } from '../hooks/useHomepage';
@@ -14,6 +15,7 @@ const HomePage = () => {
 
   return (
     <Main>
+      <DialogBox />
       <Flex
         direction="column"
         width="100%"
