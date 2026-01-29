@@ -23,7 +23,7 @@ You can also set privilege on which user role can access the Settings Page.
 ![Role Config Page](./screenshots/role-config.png)
 
 ## Supported Fields
-As of v1.0.2, currently supported field types are `string`, `datetime`, `Single Media`, `boolean`, and `number`. Upcoming upgrades will include support for `Mutiple Media`, and `Components`.
+As of v1.0.3, currently supported field types are `string`, `datetime`, `Single Media`, `boolean`, and `number`. Upcoming upgrades will include support for `Mutiple Media`, and `Components`.
 
 For those attributes that has prop visible of `false` and `publishedAt`, they are not currently included with the fetched data.
 
@@ -34,3 +34,6 @@ For those attributes that has prop visible of `false` and `publishedAt`, they ar
 
 ### 1.0.2
 - Added dialog pop-up if error occurs during API call
+
+### 1.0.3
+- Adjusted button heights
