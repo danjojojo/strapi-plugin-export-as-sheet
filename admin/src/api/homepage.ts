@@ -1,15 +1,36 @@
 import { useAuth, useFetchClient } from '@strapi/strapi/admin';
 import { useStateContext } from '../providers/StateProvider';
-import type { getCollectionEntries, getCollectionEntriesResponse } from '../schema/homepageSchema';
+import type {
+  getCollectionEntries,
+  getCollectionEntriesResponse,
+  getAttrAndEntriesCount,
+  getAttrAndEntriesCountResponse,
+} from '../schema/homepageSchema';
 
 export function homepageAPI() {
   const { fetchParamsUpdate, dialogUpdate } = useStateContext();
-  const { get } = useFetchClient();
+  const { get, post } = useFetchClient();
   const token = useAuth('homepageAPI', (state) => state.token);
 
   async function getExportableCollections() {
     try {
       const data = await get('/export-as-sheet/collections');
+      return data.data;
+    } catch (error) {
+      dialogUpdate({ type: 'OPEN_DIALOG', payload: true });
+      console.error(error);
+    }
+  }
+
+  async function getAttrAndEntriesCount(
+    params: getAttrAndEntriesCount
+  ): Promise<getAttrAndEntriesCountResponse | undefined> {
+    try {
+      const urlParams = new URLSearchParams({
+        start: params.startDate,
+        end: params.endDate || 'none',
+      });
+      const data = await get(`/export-as-sheet/collections/${params.uid}?${urlParams.toString()}`);
       return data.data;
     } catch (error) {
       dialogUpdate({ type: 'OPEN_DIALOG', payload: true });
@@ -24,8 +45,16 @@ export function homepageAPI() {
       const urlParams = new URLSearchParams({
         start: params.startDate,
         end: params.endDate || 'none',
+        limit: params.limit.toString(),
+        offset: params.offset.toString(),
       });
-      const data = await get(`/export-as-sheet/collections/${params.uid}?${urlParams.toString()}`);
+      const data = await post(
+        `/export-as-sheet/collections/${params.uid}/entries?${urlParams.toString()}`,
+        {
+          attributes: params.attributes,
+          mediaAttributes: params.mediaAttributes,
+        }
+      );
       return data.data;
     } catch (error) {
       dialogUpdate({ type: 'OPEN_DIALOG', payload: true });
@@ -74,5 +103,6 @@ export function homepageAPI() {
     getExportableCollections,
     getCollectionEntries,
     exportEntries,
+    getAttrAndEntriesCount,
   };
 }

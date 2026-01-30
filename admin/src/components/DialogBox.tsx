@@ -4,12 +4,7 @@ import { useStateContext } from '../providers/StateProvider';
 export function DialogBox() {
   const { dialog } = useStateContext();
   return (
-    <Dialog.Root
-      open={dialog.isOpen}
-      onOpenChange={() => {
-        console.log('onOpenChange ran');
-      }}
-    >
+    <Dialog.Root open={dialog.isOpen}>
       <Dialog.Content>
         <Dialog.Header>Notice</Dialog.Header>
         <Dialog.Body>

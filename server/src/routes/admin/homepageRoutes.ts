@@ -13,6 +13,15 @@ export default {
     {
       method: 'GET',
       path: '/collections/:uid',
+      handler: 'homepageController.getAttrAndEntriesCount',
+      config: {
+        policies: [],
+        middlewares: [],
+      },
+    },
+    {
+      method: 'POST',
+      path: '/collections/:uid/entries',
       handler: 'homepageController.getEntries',
       config: {
         policies: [],

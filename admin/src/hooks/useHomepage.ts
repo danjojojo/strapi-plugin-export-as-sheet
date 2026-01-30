@@ -1,10 +1,18 @@
 import { homepageAPI } from '../api/homepage';
 import { useStateContext } from '../providers/StateProvider';
-import type { getCollectionEntries } from '../schema/homepageSchema';
+import type { getCollectionEntries, getAttrAndEntriesCount } from '../schema/homepageSchema';
 
 export function useHomepage() {
   const homepageApi = homepageAPI();
   const { fetchParams, fetchParamsUpdate, homepage, homepageUpdate } = useStateContext();
+
+  const baseParams = {
+    uid: homepage.selectedCollection ?? '',
+    startDate: fetchParams.startDate?.toISOString() || new Date().toISOString(),
+    endDate: fetchParams.endDate!.toISOString(),
+    limit: fetchParams.limit,
+    offset: fetchParams.offset,
+  };
 
   const fetchExportableCollections = async () => {
     const data = await homepageApi.getExportableCollections();
@@ -16,18 +24,53 @@ export function useHomepage() {
     homepageUpdate({ type: 'SET_SELECTED_COLLECTION', payload: value.toString() });
   };
 
+  const fetchInit = async () => {
+    if (!homepage.selectedCollection) return;
+
+    const attrAndCountParams: getAttrAndEntriesCount = {
+      uid: homepage.selectedCollection,
+      startDate: fetchParams.startDate?.toISOString() || new Date().toISOString(),
+      endDate: fetchParams.endDate!.toISOString(),
+    };
+
+    const attrAndCountData = await homepageApi.getAttrAndEntriesCount(attrAndCountParams);
+    homepageUpdate({ type: 'SET_ATTRIBUTES', payload: attrAndCountData?.attributes || [] });
+    homepageUpdate({
+      type: 'SET_MEDIA_ATTRIBUTES',
+      payload: attrAndCountData?.mediaAttributes || [],
+    });
+    homepageUpdate({
+      type: 'SET_ENTRIES_TOTAL_COUNT',
+      payload: attrAndCountData?.entriesTotalCount || 0,
+    });
+
+    let entriesParams: getCollectionEntries;
+
+    if (attrAndCountData) {
+      entriesParams = {
+        ...baseParams,
+        attributes: attrAndCountData.attributes,
+        mediaAttributes: attrAndCountData.mediaAttributes,
+      };
+
+      const entriesData = await homepageApi.getCollectionEntries(entriesParams);
+      homepageUpdate({ type: 'SET_ENTRIES', payload: entriesData?.entries || [] });
+      fetchParamsUpdate({ type: 'SET_OFFSET', payload: entriesData?.entries?.length || 0 });
+      fetchParamsUpdate({ type: 'SET_DISABLE_FETCH', payload: true });
+    }
+  };
+
   const fetchCollectionEntries = async () => {
     if (!homepage.selectedCollection) return;
 
     const params: getCollectionEntries = {
-      uid: homepage.selectedCollection,
-      startDate: fetchParams.startDate?.toISOString() || new Date().toISOString(),
-      endDate: fetchParams.endDate?.toISOString() || null,
+      ...baseParams,
+      attributes: homepage.attributes,
+      mediaAttributes: homepage.mediaAttributes,
     };
 
     const data = await homepageApi.getCollectionEntries(params);
-    homepageUpdate({ type: 'SET_ENTRIES', payload: data?.entries || [] });
-    homepageUpdate({ type: 'SET_ATTRIBUTES', payload: data?.attributes || [] });
+    homepageUpdate({ type: 'LOAD_MORE_ENTRIES', payload: data?.entries || [] });
     fetchParamsUpdate({ type: 'SET_DISABLE_FETCH', payload: true });
   };
 
@@ -57,5 +100,6 @@ export function useHomepage() {
     fetchCollectionEntries,
     updateDate,
     exportAsSheet,
+    fetchInit,
   };
 }

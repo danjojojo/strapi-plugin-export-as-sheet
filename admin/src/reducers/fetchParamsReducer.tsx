@@ -4,6 +4,8 @@ type FetchParams = {
   startDate: Date | undefined;
   endDate: Date | undefined;
   maxEndDate: Date | undefined;
+  limit: number;
+  offset: number;
 };
 
 type FetchParamsAction =
@@ -11,7 +13,8 @@ type FetchParamsAction =
   | { type: 'SET_DISABLE_EXPORT'; payload: boolean }
   | { type: 'SET_START_DATE'; payload: Date | undefined }
   | { type: 'SET_END_DATE'; payload: Date | undefined }
-  | { type: 'SET_MAX_END_DATE'; payload: Date | undefined };
+  | { type: 'SET_MAX_END_DATE'; payload: Date | undefined }
+  | { type: 'SET_OFFSET'; payload: number };
 
 export function fetchParamsReducer(state: FetchParams, action: FetchParamsAction) {
   switch (action.type) {
@@ -25,6 +28,8 @@ export function fetchParamsReducer(state: FetchParams, action: FetchParamsAction
       return { ...state, endDate: action.payload };
     case 'SET_MAX_END_DATE':
       return { ...state, maxEndDate: action.payload };
+    case 'SET_OFFSET':
+      return { ...state, offset: action.payload };
     default:
       return state;
   }

@@ -19,7 +19,9 @@ const useStates = () => {
     collections: [],
     selectedCollection: null,
     attributes: [],
+    mediaAttributes: [],
     entries: [],
+    entriesTotalCount: 0,
   });
   const [fetchParams, fetchParamsUpdate] = useReducer(fetchParamsReducer, {
     disableFetch: true,
@@ -27,6 +29,8 @@ const useStates = () => {
     startDate: convertDateToLocal(new Date(today)),
     endDate: convertDateToLocal(new Date(endToday)),
     maxEndDate: undefined,
+    limit: 50,
+    offset: 0,
   });
   const [settings, settingsUpdate] = useReducer(settingsReducer, {
     strapiCollections: [],

@@ -13,7 +13,7 @@ export function Header() {
       </Typography>
       <Flex alignItems="center" gap="16px">
         <Typography textColor="neutral800">
-          {homepage.entries.length} {homepage.entries.length === 1 ? 'entry' : 'entries'} found
+          {homepage.entries.length} {homepage.entries.length === 1 ? 'entry' : 'entries'} to export ({homepage.entriesTotalCount} total)
         </Typography>
         <Button
           variant="default"
