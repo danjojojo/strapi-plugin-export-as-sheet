@@ -8,11 +8,13 @@ import { useEffect } from 'react';
 export function SelectCollection() {
   const { homepage, fetchParams, fetchParamsUpdate } = useStateContext();
   const { endDate, startDate, maxEndDate, disableFetch } = fetchParams;
-  const { fetchCollectionEntries, updateDate, selectCollection } = useHomepage();
+  const { fetchInit, updateDate, selectCollection } =
+    useHomepage();
 
   useEffect(() => {
     if (homepage.selectedCollection && (fetchParams.startDate || fetchParams.endDate)) {
       fetchParamsUpdate({ type: 'SET_DISABLE_FETCH', payload: false });
+      fetchParamsUpdate({ type: 'SET_OFFSET', payload: 0 });
     }
   }, [homepage.selectedCollection, fetchParams.startDate, fetchParams.endDate]);
 
@@ -68,7 +70,7 @@ export function SelectCollection() {
       <Button
         variant="default"
         disabled={disableFetch}
-        onClick={fetchCollectionEntries}
+        onClick={fetchInit}
         marginTop="18px"
         height="38px"
       >

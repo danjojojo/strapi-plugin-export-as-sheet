@@ -12,19 +12,13 @@ const homepageController = {
     ctx.body = collections;
   },
 
-  async getEntries(ctx: Context) {
+  async getAttrAndEntriesCount(ctx: Context) {
     const collectionUid = ctx.params.uid;
     const { start, end } = ctx.query;
-    if (!collectionUid) {
-      ctx.badRequest('Collection UID is required');
-      return;
-    }
-
     const contentTypes = strapi.contentTypes[collectionUid];
 
     let attributes: any[] = [];
     let mediaAttributes: any[] = [];
-    let entries: any[] = [];
 
     for (const [key, value] of Object.entries(contentTypes.attributes)) {
       if (value.visible === false || key === 'publishedAt') continue; // for hidden attributes
@@ -38,24 +32,46 @@ const homepageController = {
       }
     }
 
-    const startDateFallback = new Date();
-    const endDateFallback = new Date();
-    startDateFallback.setHours(0, 0, 0, 0);
-    endDateFallback.setHours(23, 59, 59, 999);
-
-    const startDate = start ?? startDateFallback.toISOString();
-    const endDate = end !== 'none' ? end : endDateFallback.toISOString();
-
-    const rawEntries = await strapi.entityService.findMany(collectionUid, {
-      populate: mediaAttributes,
+    const entriesTotalCount = await strapi.documents(collectionUid).count({
       filters: {
         createdAt: {
-          $between: [startDate, endDate],
+          $between: [start, end],
         },
       },
     });
 
-    entries = rawEntries?.map((entry: any) => {
+    ctx.body = {
+      attributes,
+      mediaAttributes,
+      entriesTotalCount,
+    };
+  },
+
+  async getEntries(ctx: Context) {
+    const collectionUid = ctx.params.uid;
+    const { start, end, limit, offset } = ctx.query;
+    const { attributes, mediaAttributes } = ctx.request.body;
+
+    if (!collectionUid) {
+      ctx.badRequest('Collection UID is required');
+      return;
+    }
+
+    const rawEntries = await strapi.db.query(collectionUid).findMany({
+      populate: mediaAttributes,
+      filters: {
+        createdAt: {
+          $between: [start, end],
+        },
+        publishedAt: {
+          $notNull: true
+        }
+      },
+      limit: Number(limit),
+      offset: Number(offset),
+    });
+
+    const entries = rawEntries?.map((entry: any) => {
       const filteredEntry: any = {};
       for (const attr of attributes) {
         const value = entry[attr.field];
@@ -77,8 +93,7 @@ const homepageController = {
     });
 
     ctx.body = {
-      attributes,
-      entries,
+      entries
     };
   },
 };
